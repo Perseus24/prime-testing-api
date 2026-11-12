@@ -12,7 +12,7 @@ class StoreResultRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,12 @@ class StoreResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'result'     => ['required', 'in:pass,fail,blocked'],
+            'notes'      => ['required_if:result,fail,blocked', 'nullable', 'string', 'max:2000'],
+            'severity'   => ['required_if:result,fail', 'nullable', 'in:minor,major,critical'],
+            'frequency'  => ['required_if:result,fail', 'nullable', 'in:every,sometimes,once'],
+            'device'     => ['nullable', 'string', 'max:150'],
+            'screenshot' => ['nullable', 'image', 'max:4096'],
         ];
     }
 }
