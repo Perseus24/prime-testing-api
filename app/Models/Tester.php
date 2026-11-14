@@ -11,6 +11,7 @@ class Tester extends Authenticatable
     protected $fillable = [
         'code',
         'name',
+        'role',
         'lgu',
         'access_code'
     ];

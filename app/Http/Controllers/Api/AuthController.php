@@ -23,8 +23,8 @@ class AuthController extends Controller
         }
 
         return [
-            'token'  => $tester->createToken('pilot')->plainTextToken,
-            'tester' => $tester->only('id', 'code', 'name', 'lgu'),
+            'token'  => $tester->createToken('pilot', [$tester->role])->plainTextToken,
+            'tester' => $tester->only('id', 'code', 'name', 'lgu', 'role'),
         ];
     }
 }

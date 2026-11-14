@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TestCase;
 use Illuminate\Http\Request;
 
-class TestResulController extends Controller
+class TestResultController extends Controller
 {
     public function store(Request $request, TestCase $testCase) {
         $data = $request->safe()->except('screenshot');

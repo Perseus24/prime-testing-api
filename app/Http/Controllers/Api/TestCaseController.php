@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTestCaseRequest;
 use App\Models\TestCase;
 use Illuminate\Http\Request;
 
@@ -31,5 +32,14 @@ class TestCaseController extends Controller
                 ->where('test_case_id', $testCase->id)
                 ->first()
         ];
+    }
+
+    public function store(StoreTestCaseRequest $request) {
+        $testCase = TestCase::create([
+            ...$request->validated(),
+            'sort' => (TestCase::max('sort') ?? 0) + 1,
+        ]);
+
+        return response()->json($testCase, 201);
     }
 }

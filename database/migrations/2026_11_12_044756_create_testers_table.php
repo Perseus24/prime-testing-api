@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code')->unique();       
             $table->string('name');
             $table->string('lgu');
+            $table->enum('role', ['admin', 'tester'])->default('tester');
             $table->string('access_code');        
             $table->timestamp('submitted_at')->nullable();
             $table->timestamps();
