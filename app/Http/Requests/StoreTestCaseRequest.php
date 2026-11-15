@@ -36,7 +36,7 @@ class StoreTestCaseRequest extends FormRequest
         return [
             'code'            => ['required', 'string', 'max:20', 'unique:test_cases,code'],
             'title'           => ['required', 'string', 'max:255'],
-            'module'          => ['required', 'string', 'max:100'],
+            'module'          => ['nullable', 'string', 'max:100'],
             'platform'        => ['required', 'in:web,mobile'],
             'priority'        => ['required', 'in:low,medium,high'],
             'preconditions'   => ['array'],

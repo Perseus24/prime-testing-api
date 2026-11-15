@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestCaseRequest;
 use App\Models\TestCase;
+use App\Models\Tester;
 use Illuminate\Http\Request;
 
 class TestCaseController extends Controller
@@ -23,6 +24,28 @@ class TestCaseController extends Controller
             'platform' => $testCase->platform,
             'result' => $testResults[$testCase->id]->result ?? null
         ]);
+    }
+
+    public function adminIndex() {
+        $numberOfTesters = Tester::where('role', 'tester')->count();
+        $tests = TestCase::orderBy('sort')
+            ->withCount('results')
+            ->get()->map(fn ($testCase) => [
+            'code' => $testCase->code,
+            'title' => $testCase->title,
+            'module' => $testCase->module,
+            'platform' => $testCase->platform,
+            'priority' => $testCase->priority,
+            'result_count' => $testCase->results_count,
+            'number_of_steps' => $testCase->numberOfSteps()
+        ]);
+
+        return [
+            'data' => $tests,
+            'meta' => [
+                'number_of_testers' => $numberOfTesters
+            ]
+        ];
     }
 
     public function show(Request $request, TestCase $testCase) {

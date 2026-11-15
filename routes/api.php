@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TestCaseController;
+use App\Http\Controllers\Api\TesterController;
 use App\Http\Controllers\Api\TestResultController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +24,12 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
         Route::get('results', [TestResultController::class, 'index']);
 
+        Route::get('test-cases', [TestCaseController::class, 'adminIndex']);
         Route::post('test-cases', [TestCaseController::class, 'store']);
 
+        Route::get('testers', [TesterController::class, 'index']);
+        Route::post('testers', [TesterController::class, 'store']);
+        Route::post('testers/{tester:code}/reset-code', [TesterController::class, 'resetCode']);
+        Route::put('testers/{tester:code}', [TesterController::class, 'update']);
     });
 });

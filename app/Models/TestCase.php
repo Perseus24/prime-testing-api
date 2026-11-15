@@ -26,4 +26,13 @@ class TestCase extends Model
             'expected' => 'array'
         ];
     }
+
+    public function results()
+    {
+        return $this->hasMany(TestResult::class);
+    }
+
+    public function numberOfSteps () {
+        return count($this->steps);
+    }
 }
