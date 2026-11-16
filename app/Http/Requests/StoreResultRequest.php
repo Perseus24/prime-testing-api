@@ -23,12 +23,11 @@ class StoreResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'result'     => ['required', 'in:pass,fail,blocked'],
-            'notes'      => ['required_if:result,fail,blocked', 'nullable', 'string', 'max:2000'],
-            'severity'   => ['required_if:result,fail', 'nullable', 'in:minor,major,critical'],
-            'frequency'  => ['required_if:result,fail', 'nullable', 'in:every,sometimes,once'],
-            'device'     => ['nullable', 'string', 'max:150'],
-            'screenshot' => ['nullable', 'image', 'max:4096'],
+            'result' => ['required', 'in:passed,failed,blocked'],
+            'notes' => ['nullable', 'string', 'max:2000'],
+            'severity' => ['nullable', 'required_if:result,failed', 'in:minor,major,critical'],
+            'frequency' => ['nullable', 'required_if:result,failed', 'in:every,sometimes,once'],
+            'device' => ['nullable', 'required_if:result,failed', 'string', 'max:255'],
         ];
     }
 }

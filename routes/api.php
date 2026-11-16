@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TestCaseController;
+use App\Http\Controllers\Api\TestCaseImportController;
 use App\Http\Controllers\Api\TesterController;
 use App\Http\Controllers\Api\TestResultController;
 use Illuminate\Http\Request;
@@ -22,14 +23,18 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
-        Route::get('results', [TestResultController::class, 'index']);
+        Route::get('results', [TestResultController::class, 'adminIndex']);
 
         Route::get('test-cases', [TestCaseController::class, 'adminIndex']);
         Route::post('test-cases', [TestCaseController::class, 'store']);
+        Route::get('test-cases/{testCase:code}', [TestCaseController::class, 'show']);
 
         Route::get('testers', [TesterController::class, 'index']);
         Route::post('testers', [TesterController::class, 'store']);
         Route::post('testers/{tester:code}/reset-code', [TesterController::class, 'resetCode']);
         Route::put('testers/{tester:code}', [TesterController::class, 'update']);
+
+        Route::post('test-cases/import/preview', [TestCaseImportController::class, 'preview']);
+        Route::post('test-cases/import', [TestCaseImportController::class, 'store']);
     });
 });
