@@ -21,7 +21,9 @@ class TestCaseController extends Controller
             'code' => $testCase->code,
             'title' => $testCase->title,
             'module' => $testCase->module,
+            'priority' => $testCase->priority,
             'platform' => $testCase->platform,
+            'number_of_steps' => $testCase->numberOfSteps(),
             'result' => $testResults[$testCase->id]->result ?? null
         ]);
     }
