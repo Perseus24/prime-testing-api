@@ -16,6 +16,7 @@ class TestCase extends Model
         'steps',
         'expected',
         'sort',
+        'hide'
     ];
 
     protected function casts(): array
@@ -23,7 +24,8 @@ class TestCase extends Model
         return [
             'preconditions' => 'array', 
             'steps' => 'array', 
-            'expected' => 'array'
+            'expected' => 'array',
+            'hide' => 'boolean'
         ];
     }
 

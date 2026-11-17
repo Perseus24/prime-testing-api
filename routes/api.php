@@ -28,6 +28,7 @@ Route::prefix('v1')->group(function () {
         Route::get('test-cases', [TestCaseController::class, 'adminIndex']);
         Route::post('test-cases', [TestCaseController::class, 'store']);
         Route::get('test-cases/{testCase:code}', [TestCaseController::class, 'show']);
+        Route::put('test-cases/{testCase:code}/hide', [TestCaseController::class, 'hide']);
 
         Route::get('testers', [TesterController::class, 'index']);
         Route::post('testers', [TesterController::class, 'store']);

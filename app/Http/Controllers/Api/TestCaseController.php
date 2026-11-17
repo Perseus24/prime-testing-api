@@ -17,7 +17,7 @@ class TestCaseController extends Controller
             ->get()
             ->keyBy('test_case_id');
 
-        return TestCase::orderBy('sort')->get()->map(fn ($testCase) => [
+        return TestCase::orderBy('sort')->where('hide', false)->get()->map(fn ($testCase) => [
             'code' => $testCase->code,
             'title' => $testCase->title,
             'module' => $testCase->module,
@@ -39,6 +39,7 @@ class TestCaseController extends Controller
             'platform' => $testCase->platform,
             'priority' => $testCase->priority,
             'result_count' => $testCase->results_count,
+            'hide' => $testCase->hide,
             'number_of_steps' => $testCase->numberOfSteps()
         ]);
 
@@ -67,5 +68,10 @@ class TestCaseController extends Controller
         ]);
 
         return response()->json($testCase, 201);
+    }
+
+    public function hide(Request $request, TestCase $testCase) {
+        $testCase->update(['hide' => !$testCase->hide]);
+        return ['success' => true];
     }
 }

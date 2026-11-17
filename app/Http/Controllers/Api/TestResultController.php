@@ -13,6 +13,7 @@ class TestResultController extends Controller
     public function adminIndex(Request $request) {
         $testers = Tester::where('role', 'tester')->get();
         $tests = TestCase::orderBy('sort')
+            ->where('hide', false)
             ->with('results')
             ->get()
             ->map(fn ($testCase) => [
