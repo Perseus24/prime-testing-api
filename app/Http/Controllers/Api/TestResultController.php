@@ -7,6 +7,7 @@ use App\Http\Requests\StoreResultRequest;
 use App\Models\TestCase;
 use App\Models\Tester;
 use Illuminate\Http\Request;
+use League\Csv\Writer;
 
 class TestResultController extends Controller
 {
@@ -51,5 +52,41 @@ class TestResultController extends Controller
     public function submit(Request $request) {
         $request->user()->update(['submitted_at' => now()]);
         return ['success' => true];
+    }
+
+    public function export(){
+        $testers = Tester::where('role', 'tester')->get();
+        $tests = TestCase::orderBy('sort')
+            ->where('hide', false)
+            ->with('results')
+            ->get();
+
+        return response()->streamDownload(function () use ($testers, $tests) {
+            $csv = Writer::createFromStream(fopen('php://output', 'w'));
+            $csv->setOutputBOM(Writer::BOM_UTF8);
+
+            $testersById = $testers->keyBy('id');
+
+            $csv->insertOne([
+                'Code', 'Title', 'Module', 'Priority', 'Platform',
+                'Tester', 'Tester name', 'LGU',
+                'Result', 'Notes', 'Severity', 'Frequency', 'Device', 'Submitted at',
+            ]);
+
+            foreach ($tests as $test) {
+                foreach ($test->results as $result) {
+                    $tester = $testersById->get($result->tester_id);
+                    if (! $tester) continue; // skips results from admin accounts
+
+                    $csv->insertOne([
+                        $test->code, $test->title, $test->module, $test->priority, $test->platform,
+                        $tester->code, $tester->name, $tester->lgu,
+                        $result->result, $result->notes, $result->severity, $result->frequency, $result->device,
+                        $result->updated_at?->format('Y-m-d H:i'),
+                    ]);
+                }
+            }
+    }, 'results-matrix.csv', ['Content-Type' => 'text/csv']);
+
     }
 }

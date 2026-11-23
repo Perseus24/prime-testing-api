@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:sanctum', 'abilities:admin'])->prefix('admin')->group(function () {
+        Route::get('results/export', [TestResultController::class, 'export']);
         Route::get('results', [TestResultController::class, 'adminIndex']);
 
         Route::get('test-cases', [TestCaseController::class, 'adminIndex']);
@@ -37,5 +38,8 @@ Route::prefix('v1')->group(function () {
 
         Route::post('test-cases/import/preview', [TestCaseImportController::class, 'preview']);
         Route::post('test-cases/import', [TestCaseImportController::class, 'store']);
+
+
     });
+
 });
